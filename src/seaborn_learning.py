@@ -19,8 +19,8 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # load data
-df_train = pd.read_csv('train.csv')
-df_test = pd.read_csv('test.csv')
+df_train = pd.read_csv('../data/train.csv')
+df_test = pd.read_csv('../data/test.csv')
 
 # show skewness and Kurtosis  偏态和峰度
 print("Skewness : %f " % df_train['SalePrice'].skew())
@@ -71,7 +71,7 @@ with sns.axes_style("darkgrid"):
 plt.show()
 
 
-# correlation matrix， 相关矩阵  
+# correlation matrix, 相关矩阵  
 corrmat = df_train.corr() 
 f, ax = plt.subplots(figsize=a4_dims) 
 # make limits of the colormap is between -1 and 1 and plot a heatmap for data centered on 0 with a diverging colormap
@@ -89,6 +89,7 @@ cm = np.corrcoef(df_train[cols].values.T)  #相关系数
 f, ax = plt.subplots(figsize=a4_dims) 
 hm_first = sns.heatmap(cm, linewidths=0.05, cbar=True, vmin=-1, vmax=1, center=0,
                       annot=True, square=True, fmt='.2f', annot_kws={'size': 8}, yticklabels=cols, xticklabels=cols, cmap='RdBu')
+
 # 突出一些特殊的数字
 for text in hm_first.texts:
     value_num = abs(float(text.get_text())) # 取绝对值
