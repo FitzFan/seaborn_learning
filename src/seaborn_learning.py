@@ -31,12 +31,73 @@ print("Kurtosis : %f " % df_train['SalePrice'].kurt())
 a4_dims = (11.7, 8.27) # A4纸大小
 
 
-# 单变量的分布
-with sns.axes_style("darkgrid"): # 比较喜欢的主题
-    f, ax = plt.subplots(figsize=a4_dims)
-    fig = sns.distplot(df_train['SalePrice'], color='orange')
-    fig.set_title('Flexibly plot a univariate distribution of observations.', weight='bold') # 设置标题
+# with sns.axes_style("darkgrid"): # 比较喜欢的主题
+    # f, ax = plt.subplots(figsize=a4_dims)
+    # fig = sns.countplot(x='Street',  data=df_train) # 离散型变量取值分布
+    # fig = sns.distplot(a=df_train[df_train['LotFrontage'].notnull()]['LotFrontage']) # 连续性变量取值分布
+    # fig = sns.countplot(x='LandContour', hue='LotShape', data=df_train, palette="Set3") # 离散型变量+分类变量取值分布
+
+    # 离散型变量+连续性变量+分类变量分布
+    # fig = sns.barplot(x='LandContour',y='LotConfig',data=df_train, hue='LotShape',palette="Set3",estimator=np.median) 
+#     fig.set_title('Value Distribution Of %s'%('LandContour'), weight='bold') # 设置标题
+#     # fig = sns.countplot(x="class", hue='who',data=titanic)
+# plt.show()
+# sys.exit()
+
+# 分面图
+# titanic = sns.load_dataset("titanic")
+# with sns.axes_style("darkgrid"): 
+    # strip: 散点图, 相同取值的点会重合。
+    # swarm: 分散点图，相同取值的点不会重合。
+    # bar:条形图，条形是均值，线条的估计：线条的最上面的位置代表最大值的位置
+    # box: 箱线图 ----常用
+    # count: 频次, 用这个kind，不需要传 y 参数 ---- 常用
+    # violin: 小提琴图
+    # fig = sns.stripplot(x="LandContour", y="LotFrontage",data=df_train)
+    # fig = sns.swarmplot(x="LandContour", y="LotFrontage",data=df_train)
+    # fig = sns.catplot(x="LandContour", y="LotFrontage", col="LotShape", col_wrap=4, data=df_train, kind="box", size=2.5, aspect=.8, palette="Set3")
+    # fig = sns.catplot(x="LandContour", y="LotFrontage", col="LotShape", hue='CentralAir', col_wrap=4, data=df_train, kind="box", size=2.5, aspect=.8)
+    
+# plt.show()
+
+# sys.exit()
+
+
+# 回归图
+# tips = sns.load_dataset("tips")
+# with sns.axes_style("darkgrid"): 
+#     fig = sns.lmplot(x="size", y="total_bill", hue="day", data=tips, aspect=.4, x_jitter=.1) # 绘制在一张画布
+#     fig = sns.lmplot(x="size", y="total_bill", col="day", data=tips, aspect=.4, x_jitter=.1) # 多张画布，但颜色一样
+#     fig = sns.lmplot(x="size", y="total_bill", hue="day", col='day', data=tips, aspect=.4, x_jitter=.1) # 多张画布，颜色不一样
+
+# plt.show()
+
+# sys.exit()
+
+# 双变量密度图
+# iris = sns.load_dataset("iris")
+# setosa = iris.loc[iris.species == "setosa"]  # 组1
+# virginica = iris.loc[iris.species == "virginica"]  # 组2
+
+# with sns.axes_style("darkgrid"): 
+#     f, ax = plt.subplots(figsize=a4_dims)
+# with sns.axes_style("darkgrid"): 
+#     f, ax = plt.subplots(figsize=a4_dims)
+#     ax = sns.kdeplot(setosa.sepal_width, setosa.sepal_length, cmap="Oranges", shade=True, shade_lowest=False)
+#     ax = sns.kdeplot(virginica.sepal_width, virginica.sepal_length, cmap="Blues", shade=True, shade_lowest=False)
+
+#     # ax = sns.kdeplot(virginica.sepal_width, virginica.sepal_length, cmap="Blues", shade=True, shade_lowest=False)
+
+# plt.show()
+# sys.exit()
+
+# 双变量关系图
+tips = sns.load_dataset("tips")
+with sns.axes_style("darkgrid"): 
+    ax = sns.jointplot("total_bill", "tip", data=tips, kind="reg", stat_func=stats.pearsonr)
+
 plt.show()
+sys.exit()
 
 
 # 多变量散点图，也可以理解为 回归图
@@ -47,6 +108,9 @@ with sns.axes_style("darkgrid"):
     fig.axis(xmin=0, xmax=6000, ymin=0,ymax=800000)
     fig.set_title('Plot data and a linear regression model fit.', weight='bold') # 设置标题
 plt.show()
+
+
+sys.exit()
 
 
 # box plot overallqual / saleprice  
