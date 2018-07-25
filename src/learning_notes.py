@@ -147,7 +147,7 @@ a4_dims = (11.7, 8.27) # A4纸大小
 # sys.exit()
 
 # correlation matrix, 相关矩阵  
-corrmat = df_train.corr() 
+# corrmat = df_train.corr() 
 # f, ax = plt.subplots(figsize=a4_dims) 
 # # make limits of the colormap is between -1 and 1 and plot a heatmap for data centered on 0 with a diverging colormap
 # fig = sns.heatmap(corrmat, cmap='RdBu', linewidths=0.05, vmin=-1, vmax=1, center=0) 
@@ -256,45 +256,59 @@ corrmat = df_train.corr()
 # plt.show()
 # sys.exit()
 
+###
+# 对因变量分桶，查看不同桶之间对其它连续性变量的差异
 
-all_df = pd.concat((df_train.loc[:,'MSSubClass':'SaleCondition'], df_test.loc[:,'MSSubClass':'SaleCondition']), axis=0, ignore_index=True)
-all_df['MSSubClass'] = all_df['MSSubClass'].astype(str)
-quantitative = [f for f in all_df.columns if all_df.dtypes[f] != 'object']
-qualitative = [f for f in all_df.columns if all_df.dtypes[f] == 'object']
-print("quantitative: {}, qualitative: {}" .format (len(quantitative),len(qualitative)))
+# df_train['SalePrice'] = np.log(df_train['SalePrice'])
+# all_df = pd.concat((df_train.loc[:,'MSSubClass':'SaleCondition'], df_test.loc[:,'MSSubClass':'SaleCondition']), axis=0,ignore_index=True)
+# quantitative = [f for f in all_df.columns if all_df.dtypes[f] != 'object']
+# features = quantitative
+# train = all_df.loc[df_train.index]
+# train['SalePrice'] = df_train.SalePrice
+# standard = train[train['SalePrice'] < np.log(200000)]
+# pricey = train[train['SalePrice'] >= np.log(200000)]
+# diff = pd.DataFrame()
+# diff['feature'] = features
+# diff['difference'] = [(pricey[f].fillna(0.).mean() - standard[f].fillna(0.).mean())/(standard[f].fillna(0.).mean())
+#                       for f in features]
 
-f = pd.melt(all_df, value_vars=quantitative[0:8])
-with sns.axes_style("darkgrid"):
-    g = sns.FacetGrid(f, col="variable", col_wrap=4, sharex=False, sharey=False)
-    g = g.map(sns.distplot, "value")
-plt.show()
-sys.exit()
-
-# 一次性画多个图的demo
-# 将画布设置为一列两行
-with sns.axes_style("darkgrid"):
-    f, (ax_1, ax_2)= plt.subplots(ncols=1, nrows=2, figsize=a4_dims)
-    # 第一行的图形
-    fig = sns.distplot(df_train['SalePrice'], fit = norm, ax=ax_1) # fit 控制拟合的参数分布图形
-    fig.set_title('Flexibly plot a univariate distribution of observations In subplots', weight='bold') # 设置标题
-    # 第二行的图形
-    sns.distplot(saleprice_scaled, ax=ax_2)
-
-# Finalize the plot
-sns.despine(bottom=True)
-plt.setp(f.axes, yticks=[])
-plt.tight_layout(h_pad=2) # 有多少张图, h_pad为多少
-plt.show()
+# with sns.axes_style("darkgrid"):
+#     f, ax= plt.subplots(figsize=a4_dims)
+#     sns.barplot(data=diff, x='feature', y='difference')
+#     x=plt.xticks(rotation=90)
+# plt.show()
+# sys.exit()
 
 
-# refer:
-# https://blog.csdn.net/Amy_mm/article/details/79538083
-# https://www.kaggle.com/pmarcelino/comprehensive-data-exploration-with-python
 
+# 方差分析
+# def anova(frame, tar_col):
+#     anv = pd.DataFrame()
+#     qualitative = [f for f in frame.columns if frame.dtypes[f] == 'object']
+#     anv['feature'] = qualitative
+#     pvals = []
+#     for c in qualitative:
+#         samples = []
+#         for cls in frame[c].unique():
+#             s = frame[frame[c] == cls][tar_col].values
+#             samples.append(s)
+#         pval = stats.f_oneway(*samples)[1]
+#         pvals.append(pval)
+#     anv['pval'] = pvals
+#     return anv.sort_values('pval')
 
-"""
-学习记录：
-1、无法保存图片。
-2、学习更多的画图方法。
+# all_df = pd.concat((df_train.loc[:,'MSSubClass':'SaleCondition'], df_test.loc[:,'MSSubClass':'SaleCondition']), axis=0,ignore_index=True)
 
-"""
+# train = all_df.loc[df_train.index]
+# train['SalePrice'] = df_train.SalePrice
+# a = anova(df_train, 'SalePrice')
+# a['disparity'] = np.log(1./a['pval'].values)
+# print a
+# with sns.axes_style("darkgrid"):
+#     f, ax= plt.subplots(figsize=a4_dims)
+#     sns_plot = sns.barplot(data=a, x='feature', y='disparity')
+#     ax.set_xticklabels(ax.get_xticklabels(), rotation=90, fontsize=6)
+#     # sns_plot.figure.savefig('sns_style_update.svg', format='svg', dpi=1200)
+#     # sns_plot.figure.savefig('sns_style_update.jpg', dpi=100, bbox_inches='tight')
+# plt.show()
+# sys.exit()
